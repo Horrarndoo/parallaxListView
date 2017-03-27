@@ -16,7 +16,7 @@ import com.nineoldandroids.animation.ValueAnimator;
  * Created by Horrarndoo on 2017/3/24.
  */
 
-public class ParallaxListView extends ListView {
+public class ParallaxListView extends ListView{
     /**
      * imageView最大高度
      */
@@ -96,21 +96,21 @@ public class ParallaxListView extends ListView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_UP) {
-            //放手的时候讲imageHead的高度缓慢从当前高度恢复到最初高度
-            final ValueAnimator animator = ValueAnimator.ofInt(ivHead.getHeight(), orignalHeight);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int animateValue = (int) animator.getAnimatedValue();
-                    ivHead.getLayoutParams().height = animateValue;
-                    //使布局参数生效
-                    ivHead.requestLayout();
-                }
-            });
-            animator.setInterpolator(new OvershootInterpolator(3.f));//弹性插值器
-            animator.setDuration(350);
-            animator.start();
+        if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_UP){
+                //放手的时候讲imageHead的高度缓慢从当前高度恢复到最初高度
+                final ValueAnimator animator = ValueAnimator.ofInt(ivHead.getHeight(), orignalHeight);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        int animateValue = (int) animator.getAnimatedValue();
+                        ivHead.getLayoutParams().height = animateValue;
+                        //使布局参数生效
+                        ivHead.requestLayout();
+                    }
+                });
+                animator.setInterpolator(new OvershootInterpolator(3.f));//弹性插值器
+                animator.setDuration(350);
+                animator.start();
         }
         return super.onTouchEvent(ev);
     }

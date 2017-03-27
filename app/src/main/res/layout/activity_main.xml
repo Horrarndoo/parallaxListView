@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.zyw.horrarndoo.parallaxlistview.view.GradientLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/gl_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zyw.horrarndoo.parallaxlistview.MainActivity">
@@ -10,6 +10,10 @@
     <com.zyw.horrarndoo.parallaxlistview.view.ParallaxListView
         android:id="@+id/lv_parallax"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     </com.zyw.horrarndoo.parallaxlistview.view.ParallaxListView>
-</RelativeLayout>
+
+    <include layout="@layout/title_bar_layout"/>
+</com.zyw.horrarndoo.parallaxlistview.view.GradientLayout>
