@@ -1,4 +1,4 @@
-package com.zyw.horrarndoo.parallaxlistview.view;
+package com.zyw.horrarndoo.parallaxlistview.view.titlebar;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,22 +12,24 @@ import android.widget.Toast;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.zyw.horrarndoo.parallaxlistview.R;
+import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.GradientLayout;
+import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.BlurPopupWindow;
 
 import java.util.ArrayList;
 
-import static com.zyw.horrarndoo.parallaxlistview.view.GradientLayout.OnGradientStateChangeListenr;
+import static com.zyw.horrarndoo.parallaxlistview.view.parallaxview.GradientLayout.OnGradientStateChangeListenr;
 
 /**
  * Created by Horrarndoo on 2017/3/27.
  */
 
 public class TitleBar extends LinearLayout implements OnClickListener,
-        OnGradientStateChangeListenr {
+        OnGradientStateChangeListenr, BlurPopupWindow.OnPopupStateListener {
     private Button btn_back;
     private Button btn_add;
     private TextView tv_title;
-    private boolean isShow;
-    private HintPopupWindow hintPopupWindow;
+    private boolean isDisplay;
+    private BlurPopupWindow blurPopupWindow;
     private Context context;
 
     public TitleBar(Context context) {
@@ -67,7 +69,8 @@ public class TitleBar extends LinearLayout implements OnClickListener,
         clickList.add(clickListener);
 
         //具体初始化逻辑看下面的图
-        hintPopupWindow = new HintPopupWindow(context, strList, clickList);
+        blurPopupWindow = new BlurPopupWindow(context, strList, clickList);
+        blurPopupWindow.setOnPopupStateListener(this);
     }
 
     /**
@@ -98,12 +101,10 @@ public class TitleBar extends LinearLayout implements OnClickListener,
         switch (v.getId()) {
             case R.id.btn_add:
                 if (onBarClicklistener != null) {
-                    if (isShow) {
+                    if (isDisplay) {
                         dismissPopupWindow();
-                        hintPopupWindow.dismissPopupWindow();
                     } else {
-                        showPopupWindow();
-                        hintPopupWindow.showPopupWindow(v);
+                        displayPopupWindow(v);
                     }
                     onBarClicklistener.onBarClick(R.id.btn_add);
                 }
@@ -116,15 +117,27 @@ public class TitleBar extends LinearLayout implements OnClickListener,
         }
     }
 
-    public void showPopupWindow() {
-        //Add按钮逆时针转90度
-        isShow = true;
-        ObjectAnimator.ofFloat(btn_add, "rotation", 0.f, -90.f).setDuration(500).start();
+    public void displayPopupWindow(View v) {
+        displayAnim();
+        blurPopupWindow.displayPopupWindow(v);
     }
 
     public void dismissPopupWindow() {
-        //Add按钮瞬时间转90度
-        isShow = false;
+        dismissAnim();
+        blurPopupWindow.dismissPopupWindow();
+    }
+
+    /**
+     * Add按钮逆时针转90度
+     */
+    private void displayAnim(){
+        ObjectAnimator.ofFloat(btn_add, "rotation", 0.f, -90.f).setDuration(500).start();
+    }
+
+    /**
+     *  Add按钮瞬时间转90度
+     */
+    private void dismissAnim(){
         ObjectAnimator.ofFloat(btn_add, "rotation", 0.f, 90.f).setDuration(500).start();
     }
 
@@ -134,8 +147,20 @@ public class TitleBar extends LinearLayout implements OnClickListener,
         this.onBarClicklistener = onBarClicklistener;
     }
 
+    @Override
+    public void onDisplay(boolean isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    @Override
+    public void onDismiss(boolean isDisplay) {
+        this.isDisplay = isDisplay;
+        dismissAnim();
+    }
+
+
     public interface OnBarClicklistener {
-        public void onBarClick(int id);
+        void onBarClick(int id);
     }
 
     /**

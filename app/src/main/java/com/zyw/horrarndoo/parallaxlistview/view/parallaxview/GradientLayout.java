@@ -1,4 +1,4 @@
-package com.zyw.horrarndoo.parallaxlistview.view;
+package com.zyw.horrarndoo.parallaxlistview.view.parallaxview;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.FrameLayout;
 
 import com.zyw.horrarndoo.parallaxlistview.utils.ColorUtil;
+import com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar;
 
 /**
  * Created by Horrarndoo on 2017/3/27.

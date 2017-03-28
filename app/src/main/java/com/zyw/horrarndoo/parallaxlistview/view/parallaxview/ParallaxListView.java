@@ -1,4 +1,4 @@
-package com.zyw.horrarndoo.parallaxlistview.view;
+package com.zyw.horrarndoo.parallaxlistview.view.parallaxview;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

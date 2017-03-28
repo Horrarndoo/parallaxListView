@@ -10,15 +10,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.zyw.horrarndoo.parallaxlistview.utils.Utils;
-import com.zyw.horrarndoo.parallaxlistview.view.ParallaxAdapter;
-import com.zyw.horrarndoo.parallaxlistview.view.ParallaxListView;
-import com.zyw.horrarndoo.parallaxlistview.view.TitleBar;
+import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
+import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.ParallaxAdapter;
+import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.ParallaxListView;
+import com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zyw.horrarndoo.parallaxlistview.view.TitleBar.OnBarClicklistener;
+import static com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar.OnBarClicklistener;
 
 public class MainActivity extends AppCompatActivity implements OnBarClicklistener {
     private ParallaxListView lvParallax;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnBarClicklistene
      */
     private void initState() {
         //将状态栏设置成透明色
-        Utils.setBarColor(this, Color.TRANSPARENT);
+        UIUtils.setBarColor(this, Color.TRANSPARENT);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -69,10 +69,11 @@ public class MainActivity extends AppCompatActivity implements OnBarClicklistene
     public void onBarClick(int id) {
         switch (id) {
             case R.id.btn_add:
-                Toast.makeText(this, "btn_add is clicked.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "btn_add is clicked.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_back:
                 Toast.makeText(this, "btn_back is clicked.", Toast.LENGTH_SHORT).show();
+//                finish();
                 break;
         }
     }

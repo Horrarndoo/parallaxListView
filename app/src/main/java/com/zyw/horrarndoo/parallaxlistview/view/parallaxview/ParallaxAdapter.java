@@ -1,4 +1,4 @@
-package com.zyw.horrarndoo.parallaxlistview.view;
+package com.zyw.horrarndoo.parallaxlistview.view.parallaxview;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zyw.horrarndoo.parallaxlistview.R;
+import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.BlurPopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
  * Created by Horrarndoo on 2017/3/24.
  */
 
-public class ParallaxAdapter extends BaseAdapter {
+public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPopupStateListener{
     private List<String> list;
     private Context context;
-    private boolean isShow;
-    private HintPopupWindow hintPopupWindow;
+    private boolean isDisplay;
+    private BlurPopupWindow blurPopupWindow;
 
     public ParallaxAdapter(Context context, List<String> list) {
         this.context = context;
@@ -55,16 +56,24 @@ public class ParallaxAdapter extends BaseAdapter {
         holder.btn_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isShow) {
-                    isShow = false;
-                    hintPopupWindow.dismissPopupWindow();
+                if (isDisplay) {
+                    blurPopupWindow.dismissPopupWindow();
                 } else {
-                    isShow = true;
-                    hintPopupWindow.showPopupWindow(v);
+                    blurPopupWindow.displayPopupWindow(v);
                 }
             }
         });
         return convertView;
+    }
+
+    @Override
+    public void onDismiss(boolean isDisplay) {
+        this.isDisplay = isDisplay;
+    }
+
+    @Override
+    public void onDisplay(boolean isDisplay) {
+        this.isDisplay = isDisplay;
     }
 
     private static class ViewHolder{
@@ -106,6 +115,7 @@ public class ParallaxAdapter extends BaseAdapter {
         clickList.add(clickListener);
 
         //具体初始化逻辑看下面的图
-        hintPopupWindow = new HintPopupWindow(context, strList, clickList);
+        blurPopupWindow = new BlurPopupWindow(context, strList, clickList);
+        blurPopupWindow.setOnPopupStateListener(this);
     }
 }
