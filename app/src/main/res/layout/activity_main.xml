@@ -11,6 +11,7 @@
         android:id="@+id/lv_parallax"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     </com.zyw.horrarndoo.parallaxlistview.view.ParallaxListView>

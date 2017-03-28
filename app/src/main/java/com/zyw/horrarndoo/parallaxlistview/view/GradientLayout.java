@@ -34,7 +34,7 @@ public class GradientLayout extends FrameLayout implements OnScrollListener {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if (getChildCount() > 2) {
+        if (getChildCount() != 2) {
             throw new IllegalArgumentException("only can 2 child in this view");
         } else {
             if (getChildAt(0) instanceof ParallaxListView) {
@@ -66,11 +66,10 @@ public class GradientLayout extends FrameLayout implements OnScrollListener {
             totalItemCount) {
         if (firstVisibleItem == 0) {
             View headView = view.getChildAt(0);
-            View secondView = view.getChildAt(1);
             if (headView != null) {
-                //如果上滑超过headView高度值一半+第一个要显示的item高度，开启伴随动画
+                //如果上滑超过headView高度值一半+title高度，开启伴随动画
                 float slideValue = Math.abs(headView.getTop()) - headView.getHeight() / 2.f +
-                        secondView.getHeight();
+                        tb_title.getHeight();
                 if (slideValue < 0)
                     slideValue = 0;
                 float fraction = slideValue / (headView.getHeight() / 2.f);

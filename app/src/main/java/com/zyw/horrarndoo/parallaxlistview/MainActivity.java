@@ -1,7 +1,6 @@
 package com.zyw.horrarndoo.parallaxlistview;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.zyw.horrarndoo.parallaxlistview.utils.Utils;
 import com.zyw.horrarndoo.parallaxlistview.view.ParallaxAdapter;
 import com.zyw.horrarndoo.parallaxlistview.view.ParallaxListView;
 import com.zyw.horrarndoo.parallaxlistview.view.TitleBar;
@@ -18,7 +18,7 @@ import com.zyw.horrarndoo.parallaxlistview.view.TitleBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zyw.horrarndoo.parallaxlistview.view.TitleBar.*;
+import static com.zyw.horrarndoo.parallaxlistview.view.TitleBar.OnBarClicklistener;
 
 public class MainActivity extends AppCompatActivity implements OnBarClicklistener {
     private ParallaxListView lvParallax;
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements OnBarClicklistene
     }
 
     private void init() {
-        for (int i = 0; i < 30; i++){
-            list.add("content - " + i);
+        for (int i = 0; i < 30; i++) {
+            list.add("user - " + i);
         }
         tb_title = (TitleBar) findViewById(R.id.tb_title);
         lvParallax = (ParallaxListView) findViewById(R.id.lv_parallax);
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnBarClicklistene
         lvParallax.addHeaderView(headerView);
         lvParallax.setAdapter(new ParallaxAdapter(this, list));
         tb_title.setOnBarChildClicklistener(this);
+        tb_title.setActivity(this);
     }
 
     /**
@@ -57,31 +58,16 @@ public class MainActivity extends AppCompatActivity implements OnBarClicklistene
      */
     private void initState() {
         //将状态栏设置成透明色
-        setBarColor(Color.TRANSPARENT);
+        Utils.setBarColor(this, Color.TRANSPARENT);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.hide();
-        }
-    }
-
-    /**
-     * 设置状态栏背景色
-     * @param color
-     */
-    private void setBarColor(int color){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//android5.0及以上才有透明效果
-            View decorView = getWindow().getDecorView();
-            //让应用的主体内容占用系统状态栏的空间
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(color);
         }
     }
 
     @Override
     public void onBarClick(int id) {
-        switch (id){
+        switch (id) {
             case R.id.btn_add:
                 Toast.makeText(this, "btn_add is clicked.", Toast.LENGTH_SHORT).show();
                 break;

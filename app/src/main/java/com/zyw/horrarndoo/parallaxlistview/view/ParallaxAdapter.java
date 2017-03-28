@@ -1,14 +1,17 @@
 package com.zyw.horrarndoo.parallaxlistview.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zyw.horrarndoo.parallaxlistview.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +21,13 @@ import java.util.List;
 public class ParallaxAdapter extends BaseAdapter {
     private List<String> list;
     private Context context;
+    private boolean isShow;
+    private HintPopupWindow hintPopupWindow;
 
     public ParallaxAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
+        initPopupWindow((Activity) context);
     }
 
     @Override
@@ -45,16 +51,29 @@ public class ParallaxAdapter extends BaseAdapter {
             convertView = View.inflate(context, R.layout.list_item, null);
         }
         ViewHolder holder = ViewHolder.getHolder(convertView);
-        holder.tv_content.setText((String)list.get(position));
+        holder.tv_user.setText((String)list.get(position));
+        holder.btn_down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShow) {
+                    isShow = false;
+                    hintPopupWindow.dismissPopupWindow();
+                } else {
+                    isShow = true;
+                    hintPopupWindow.showPopupWindow(v);
+                }
+            }
+        });
         return convertView;
     }
 
     private static class ViewHolder{
-        ImageView imageView;
-        TextView tv_content;
+        TextView tv_user;
+        Button btn_down;
+
         private ViewHolder(View convertView){
-            imageView = (ImageView) convertView.findViewById(R.id.iv_head);
-            tv_content = (TextView) convertView.findViewById(R.id.tv_content);
+            tv_user = (TextView) convertView.findViewById(R.id.tv_user);
+            btn_down = (Button) convertView.findViewById(R.id.btn_down);
         }
 
         public static ViewHolder getHolder(View convertView){
@@ -65,5 +84,28 @@ public class ParallaxAdapter extends BaseAdapter {
             }
             return holder;
         }
+    }
+
+    private void initPopupWindow(final Activity context){
+        //下面的操作是初始化弹出数据
+        ArrayList<String> strList = new ArrayList<>();
+        strList.add("选项item1");
+        strList.add("选项item2");
+        strList.add("选项item3");
+
+        ArrayList<View.OnClickListener> clickList = new ArrayList<>();
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "click click click.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        clickList.add(clickListener);
+        clickList.add(clickListener);
+        clickList.add(clickListener);
+        clickList.add(clickListener);
+
+        //具体初始化逻辑看下面的图
+        hintPopupWindow = new HintPopupWindow(context, strList, clickList);
     }
 }
