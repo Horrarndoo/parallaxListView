@@ -7,18 +7,39 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.zyw.horrarndoo.parallaxlistview.utils.ColorUtil;
+import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 import com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar;
 
 /**
  * Created by Horrarndoo on 2017/3/27.
  */
 
-public class GradientLayout extends FrameLayout implements OnScrollListener {
+public class GradientLayout extends FrameLayout implements OnScrollListener, ParallaxListView.OnRefeshChangeListener {
     private TitleBar tb_title;
     private ParallaxListView plv;
     private static final float CRITICA_LVALUE = 0.5f;
+    private OnGradientStateChangeListenr onGradientStateChangeListenr;
+    private OnRefeshChangeListener onRefeshChangeListener;
+    private Context context;
+
+    /**
+     * 设置list刷新状态监听
+     * @param onRefeshChangeListener
+     */
+    public void setOnRefeshChangeListener(OnRefeshChangeListener onRefeshChangeListener){
+        this.onRefeshChangeListener = onRefeshChangeListener;
+    }
+
+    /**
+     * 设置Gradient状态监听
+     * @param onGradientStateChangeListenr
+     */
+    public void setOnGradientStateChangeListenr(OnGradientStateChangeListenr onGradientStateChangeListenr){
+        this.onGradientStateChangeListenr = onGradientStateChangeListenr;
+    }
 
     public GradientLayout(Context context) {
         this(context, null);
@@ -30,6 +51,7 @@ public class GradientLayout extends FrameLayout implements OnScrollListener {
 
     public GradientLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
     }
 
     @Override
@@ -41,11 +63,12 @@ public class GradientLayout extends FrameLayout implements OnScrollListener {
             if (getChildAt(0) instanceof ParallaxListView) {
                 plv = (ParallaxListView) getChildAt(0);
                 plv.setOnScrollListener(this);
+                plv.setOnRefeshChangeListener(this);
             } else {
                 throw new IllegalArgumentException("child(0) must be ParallaxListView");
             }
             tb_title = (TitleBar) getChildAt(1);
-            tb_title.setOnGradientStateChangeListenr(this);
+            tb_title.setTitleBarListenr(this);
         }
     }
 
@@ -101,10 +124,39 @@ public class GradientLayout extends FrameLayout implements OnScrollListener {
         tb_title.setTitleText(msg);
     }
 
-    private OnGradientStateChangeListenr onGradientStateChangeListenr;
+    @Override
+    public void onListRefesh() {
+        onRefeshChangeListener.onListRefesh();
+    }
 
-    public void setOnGradientStateChangeListenr(OnGradientStateChangeListenr onGradientStateChangeListenr){
-        this.onGradientStateChangeListenr = onGradientStateChangeListenr;
+    @Override
+    public void onListRefeshFinish(final boolean isRefeshSuccess) {
+        UIUtils.runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                if(isRefeshSuccess){
+                    Toast.makeText(UIUtils.getContext(), "refesh success.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(UIUtils.getContext(), "refesh failed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //不论刷新成功还是失败，都要通知titleBar刷新完成
+        onRefeshChangeListener.onListRefeshFinish();
+    }
+
+    /**
+     * 列表刷新状态监听
+     */
+    public interface OnRefeshChangeListener{
+        /**
+         * 开始刷新列表，请求数据
+         */
+        void onListRefesh();
+        /**
+         * 刷新列表完成，isRefeshSuccess参数代表刷新成功状态 true:成功 false:失败
+         */
+        void onListRefeshFinish();
     }
 
     /**

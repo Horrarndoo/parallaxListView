@@ -16,7 +16,7 @@ import com.nineoldandroids.animation.ValueAnimator;
  * Created by Horrarndoo on 2017/3/24.
  */
 
-public class ParallaxListView extends ListView{
+public class ParallaxListView extends ListView {
     /**
      * imageView最大高度
      */
@@ -29,7 +29,7 @@ public class ParallaxListView extends ListView{
      * 头布局imageView
      */
     private ImageView ivHead;
-
+    private boolean isRefeshing;
 
     public ParallaxListView(Context context) {
         super(context);
@@ -79,7 +79,7 @@ public class ParallaxListView extends ListView{
             scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean
                                            isTouchEvent) {
         //Log.e("tag", "deltaY: " + deltaY + "  isTouchEvent:" + isTouchEvent);
-            if (deltaY < 0 && isTouchEvent) {//顶部到头，并且是手动拖到顶部
+        if (deltaY < 0 && isTouchEvent) {//顶部到头，并且是手动拖到顶部
             if (ivHead != null) {
                 int newHeight = ivHead.getHeight() - deltaY / 3;
                 if (newHeight > maxHeight) {
@@ -96,22 +96,72 @@ public class ParallaxListView extends ListView{
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_UP){
-                //放手的时候讲imageHead的高度缓慢从当前高度恢复到最初高度
-                final ValueAnimator animator = ValueAnimator.ofInt(ivHead.getHeight(), orignalHeight);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        int animateValue = (int) animator.getAnimatedValue();
-                        ivHead.getLayoutParams().height = animateValue;
-                        //使布局参数生效
-                        ivHead.requestLayout();
+        if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_UP) {
+            //如果松手时headView滑动的距离大于预设值，回调onRefesh
+            Log.e("tag", "ivHead.getHeight() = " + ivHead.getHeight());
+            Log.e("tag", "orignalHeight = " + orignalHeight);
+            if (ivHead.getHeight() - orignalHeight > 60) {
+                if(onRefeshChangeListener != null){
+                    onRefeshChangeListener.onListRefesh();
+                    if(!isRefeshing){//当前不是刷新状态时
+                        getData();
+                        isRefeshing = true;
                     }
-                });
-                animator.setInterpolator(new OvershootInterpolator(3.f));//弹性插值器
-                animator.setDuration(350);
-                animator.start();
+                }
+            }
+            //放手的时候讲imageHead的高度缓慢从当前高度恢复到最初高度
+            final ValueAnimator animator = ValueAnimator.ofInt(ivHead.getHeight(), orignalHeight);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int animateValue = (int) animator.getAnimatedValue();
+                    ivHead.getLayoutParams().height = animateValue;
+                    //使布局参数生效
+                    ivHead.requestLayout();
+                }
+            });
+            animator.setInterpolator(new OvershootInterpolator(3.f));//弹性插值器
+            animator.setDuration(350);
+            animator.start();
         }
         return super.onTouchEvent(ev);
+    }
+
+    /**
+     * 开启一个线程模拟网络请求操作
+     */
+    private void getData(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //test
+                onRefeshChangeListener.onListRefeshFinish(true);
+                isRefeshing = false;
+                //onRefeshChangeListener.onRefeshFinish(true);
+            }
+        }).start();
+    }
+
+    private  OnRefeshChangeListener onRefeshChangeListener;
+
+    public void setOnRefeshChangeListener(OnRefeshChangeListener onRefeshChangeListener){
+        this.onRefeshChangeListener = onRefeshChangeListener;
+    }
+
+    public interface OnRefeshChangeListener{
+        /**
+         * 开始刷新列表，请求数据
+         */
+        void onListRefesh();
+
+        /**
+         * 刷新列表完成，isRefeshSuccess参数代表刷新成功状态 true:成功 false:失败
+         */
+        void onListRefeshFinish(boolean isRefeshSuccess);
     }
 }

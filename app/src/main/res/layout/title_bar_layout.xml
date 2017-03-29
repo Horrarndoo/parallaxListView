@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar
     xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/tb_title"
-              android:layout_width="match_parent"
-              android:layout_height="90dp">
+    android:id="@+id/tb_title"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
 
     <Button
         android:id="@+id/btn_back"
@@ -14,17 +14,34 @@
         android:layout_marginTop="10dp"
         android:background="@mipmap/back"/>
 
-    <TextView
-        android:id="@+id/tv_title"
+    <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginTop="43dp"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:gravity="center_horizontal"
-        android:text="Title"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_title"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_toLeftOf="@+id/tv_title"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="2dp"
+            android:src="@mipmap/refesh"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:background="@android:color/transparent"
+            android:text="Title"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/btn_add"
