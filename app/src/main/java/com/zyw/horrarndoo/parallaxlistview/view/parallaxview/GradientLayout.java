@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.zyw.horrarndoo.parallaxlistview.utils.ColorUtil;
 import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
-import com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar;
 
 /**
  * Created by Horrarndoo on 2017/3/27.
@@ -146,7 +145,7 @@ public class GradientLayout extends FrameLayout implements OnScrollListener, Par
     }
 
     /**
-     * 列表刷新状态监听
+     * GradientLayout中的子list列表刷新状态监听
      */
     public interface OnRefeshChangeListener{
         /**
@@ -154,7 +153,7 @@ public class GradientLayout extends FrameLayout implements OnScrollListener, Par
          */
         void onListRefesh();
         /**
-         * 刷新列表完成，isRefeshSuccess参数代表刷新成功状态 true:成功 false:失败
+         * 刷新列表完成
          */
         void onListRefeshFinish();
     }

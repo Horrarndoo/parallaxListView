@@ -2,15 +2,21 @@ package com.zyw.horrarndoo.parallaxlistview.view.parallaxview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zyw.horrarndoo.parallaxlistview.R;
+import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.BlurPopupWindow;
+import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.PopupListAdapter;
+import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.PopupListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +25,7 @@ import java.util.List;
  * Created by Horrarndoo on 2017/3/24.
  */
 
-public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPopupStateListener{
+public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPopupStateListener {
     private List<String> list;
     private Context context;
     private boolean isDisplay;
@@ -48,11 +54,11 @@ public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPo
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = View.inflate(context, R.layout.list_item, null);
         }
         ViewHolder holder = ViewHolder.getHolder(convertView);
-        holder.tv_user.setText((String)list.get(position));
+        holder.tv_user.setText(list.get(position));
         holder.btn_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,18 +82,18 @@ public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPo
         this.isDisplay = isDisplay;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView tv_user;
         Button btn_down;
 
-        private ViewHolder(View convertView){
+        private ViewHolder(View convertView) {
             tv_user = (TextView) convertView.findViewById(R.id.tv_user);
             btn_down = (Button) convertView.findViewById(R.id.btn_down);
         }
 
-        public static ViewHolder getHolder(View convertView){
+        public static ViewHolder getHolder(View convertView) {
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            if(holder == null){
+            if (holder == null) {
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
             }
@@ -95,27 +101,25 @@ public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPo
         }
     }
 
-    private void initPopupWindow(final Activity context){
-        //下面的操作是初始化弹出数据
-        ArrayList<String> strList = new ArrayList<>();
-        strList.add("选项item1");
-        strList.add("选项item2");
-        strList.add("选项item3");
+    private void initPopupWindow(final Activity context) {
+        final List<String> list_popup = new ArrayList<>();
+        final PopupListView lv_popup = new PopupListView(context);
 
-        ArrayList<View.OnClickListener> clickList = new ArrayList<>();
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        for (int i = 0; i < 3; i++) {
+            list_popup.add("popup_item_" + i);
+        }
+
+        lv_popup.setDivider(new ColorDrawable(Color.GRAY));
+        lv_popup.setDividerHeight(1);
+        lv_popup.setAdapter(new PopupListAdapter(context, list_popup));
+        lv_popup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "click click click.", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(UIUtils.getContext(), "item " + position + " is clicked.", Toast
+                        .LENGTH_SHORT).show();
             }
-        };
-        clickList.add(clickListener);
-        clickList.add(clickListener);
-        clickList.add(clickListener);
-        clickList.add(clickListener);
-
-        //具体初始化逻辑看下面的图
-        blurPopupWindow = new BlurPopupWindow(context, strList, clickList);
+        });
+        blurPopupWindow = new BlurPopupWindow(context, lv_popup);
         blurPopupWindow.setOnPopupStateListener(this);
     }
 }

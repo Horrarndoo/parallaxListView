@@ -13,12 +13,12 @@ import android.widget.Toast;
 import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.ParallaxAdapter;
 import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.ParallaxListView;
-import com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar;
+import com.zyw.horrarndoo.parallaxlistview.view.parallaxview.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zyw.horrarndoo.parallaxlistview.view.titlebar.TitleBar.OnBarClicklistener;
+import static com.zyw.horrarndoo.parallaxlistview.view.parallaxview.TitleBar.OnBarClicklistener;
 
 public class MainActivity extends AppCompatActivity implements OnBarClicklistener {
     private ParallaxListView lvParallax;

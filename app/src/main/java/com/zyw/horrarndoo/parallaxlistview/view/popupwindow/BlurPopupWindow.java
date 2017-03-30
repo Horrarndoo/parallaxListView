@@ -13,15 +13,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.zyw.horrarndoo.parallaxlistview.R;
 import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.zyw.horrarndoo.parallaxlistview.view.popupwindow.PopupRootLayout.DispatchKeyEventListener;
 
 /**
@@ -38,48 +35,26 @@ public class BlurPopupWindow {
     private final int animDuration = 250;//动画执行时间
     private boolean isAniming;//动画是否在执行
 
-    /**
-     * @param contentList 点击item的内容文字
-     * @param clickList   点击item的事件
-     *                    文字和click事件的list是对应绑定的
-     */
-    public BlurPopupWindow(Activity activity, List<String> contentList, List<View
-            .OnClickListener> clickList) {
+    public BlurPopupWindow(Activity activity, View view) {
         this.activity = activity;
+
         windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-        initLayout(contentList, clickList);
+
+        view.setPadding(10, 10, 10, 0);//由于.9图片有部分是透明，往下padding 10个pix，左右padding10个pix为了美观
+        view.setBackgroundResource(R.drawable.item_pop_bg);
+
+        initLayout(view);
     }
 
-    /**
-     * @param contentList 点击item内容的文字
-     * @param clickList   点击item的事件
-     */
-    public void initLayout(List<String> contentList, List<View.OnClickListener> clickList) {
+    public void initLayout(View view) {
 
         //这是根布局
-        rootView = (PopupRootLayout) View.inflate(activity, R.layout.item_root_blur_popupwindow, null);
+        rootView = (PopupRootLayout) View.inflate(activity, R.layout.bg_popupwindow, null);
         contentLayout = (ViewGroup) rootView.findViewById(R.id.content_layout);
 
         initParams();
 
-        //格式化点击item, 将文字和click事件一一绑定上去
-        List<View> list = new ArrayList<>();
-        for (int x = 0; x < contentList.size(); x++) {
-            View view = View.inflate(activity, R.layout.item_blur_popupwindow, null);
-            TextView textView = (TextView) view.findViewById(R.id.tv_content);
-            View v_line = view.findViewById(R.id.v_line);
-            textView.setText(contentList.get(x));
-            contentLayout.addView(view);
-            list.add(view);
-            if (x == 0) {
-                v_line.setVisibility(View.INVISIBLE);
-            } else {
-                v_line.setVisibility(View.VISIBLE);
-            }
-        }
-        for (int x = 0; x < list.size(); x++) {
-            list.get(x).setOnClickListener(clickList.get(x));
-        }
+        contentLayout.addView(view);
 
         //当点击根布局时, 隐藏
         rootView.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +80,8 @@ public class BlurPopupWindow {
 
     private void initParams() {
         params = new WindowManager.LayoutParams();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = MATCH_PARENT;
+        params.height = MATCH_PARENT;
         params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN //布满屏幕，忽略状态栏
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS //透明状态栏
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION; //透明虚拟按键栏
@@ -167,7 +142,7 @@ public class BlurPopupWindow {
     public void dismissPopupWindow() {
         if (!isAniming) {
             isAniming = true;
-            if(isDisplay) {
+            if (isDisplay) {
                 dismissAnim(contentLayout, 1.f, 0.f, animDuration);
             }
         }
@@ -187,19 +162,19 @@ public class BlurPopupWindow {
 
     /**
      * 弹出popupWindow属性动画
+     *
      * @param view
      * @param start
      * @param end
      * @param duration
      */
     private void displayAnim(final View view, float start, final float end, int duration) {
-
         ValueAnimator va = ValueAnimator.ofFloat(start, end).setDuration(duration);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float value = (float) animation.getAnimatedValue();
-                view.setPivotX(view.getWidth());
+                view.setPivotX(view.getMeasuredWidth());
                 view.setPivotY(0);
                 view.setScaleX(value);
                 view.setScaleY(value);
@@ -243,7 +218,7 @@ public class BlurPopupWindow {
             @Override
             public void onAnimationEnd(Animator animation) {
                 try {
-                    if(isDisplay) {
+                    if (isDisplay) {
                         windowManager.removeViewImmediate(rootView);
                     }
                 } catch (Exception e) {
@@ -259,19 +234,19 @@ public class BlurPopupWindow {
 
     private OnPopupStateListener onPopupStateListener;
 
-    public void setOnPopupStateListener(OnPopupStateListener onPopupStateListener){
+    public void setOnPopupStateListener(OnPopupStateListener onPopupStateListener) {
         this.onPopupStateListener = onPopupStateListener;
     }
 
     /**
      * popupWindow显示和消失状态变化接口
      */
-    public interface OnPopupStateListener{
+    public interface OnPopupStateListener {
         /**
          * popupWindow状态变化
          * @param isDisplay popupWindow当前状态 true:显示 false:消失
          */
-//        void onChange(boolean isDisplay);
+        //        void onChange(boolean isDisplay);
 
         /**
          * popupWindow为显示状态

@@ -3,7 +3,6 @@ package com.zyw.horrarndoo.parallaxlistview.view.parallaxview;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 import android.view.animation.OvershootInterpolator;
@@ -57,11 +56,11 @@ public class ParallaxListView extends ListView {
             public void onGlobalLayout() {
                 imageView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 orignalHeight = imageView.getHeight();
-                Log.e("tag", "orignalHeight = " + orignalHeight);
+                //Log.e("tag", "orignalHeight = " + orignalHeight);
                 //获取图片的高度
                 int drawbleHeight = imageView.getDrawable().getIntrinsicHeight();
                 maxHeight = orignalHeight > drawbleHeight ? orignalHeight * 2 : drawbleHeight;
-                Log.e("tag", "maxHeight = " + maxHeight);
+                //Log.e("tag", "maxHeight = " + maxHeight);
             }
         });
     }
@@ -98,8 +97,8 @@ public class ParallaxListView extends ListView {
     public boolean onTouchEvent(MotionEvent ev) {
         if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_UP) {
             //如果松手时headView滑动的距离大于预设值，回调onRefesh
-            Log.e("tag", "ivHead.getHeight() = " + ivHead.getHeight());
-            Log.e("tag", "orignalHeight = " + orignalHeight);
+            //Log.e("tag", "ivHead.getHeight() = " + ivHead.getHeight());
+            //Log.e("tag", "orignalHeight = " + orignalHeight);
             if (ivHead.getHeight() - orignalHeight > 60) {
                 if(onRefeshChangeListener != null){
                     onRefeshChangeListener.onListRefesh();
@@ -135,7 +134,7 @@ public class ParallaxListView extends ListView {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
