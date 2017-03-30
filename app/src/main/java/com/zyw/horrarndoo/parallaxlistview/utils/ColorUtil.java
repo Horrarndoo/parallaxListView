@@ -5,6 +5,16 @@ package com.zyw.horrarndoo.parallaxlistview.utils;
  */
 
 public class ColorUtil {
+    /**
+     * 将ArgbEvaluator计算两个颜色中间渐变色的方法单独提取出来使用
+     * ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+     * argbEvaluator.evaluate(float fraction, Object startValue,Object endValue)
+     *
+     * @param fraction
+     * @param startValue
+     * @param endValue
+     * @return
+     */
     public static Object evaluateColor(float fraction, Object startValue,
                                        Object endValue) {
         int startInt = (Integer) startValue;
