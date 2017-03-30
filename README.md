@@ -9,4 +9,15 @@
 	6.点击+顶部弹出PopupWindow界面效果
 博客链接：[Android自定义控件：打造自己的QQ空间主页](http://blog.csdn.net/oQinYou/article/details/68491295)
 
+	完整效果
 ![](https://github.com/Horrarndoo/parallaxListView/blob/master/assets/demo.gif?raw=true)
+
+	透明渐变状态栏效果
+![](https://github.com/Horrarndoo/parallaxListView/blob/master/assets/demo_gradient.gif?raw=true)
+	
+	下拉刷新效果
+![](https://github.com/Horrarndoo/parallaxListView/blob/master/assets/demo_refesh.gif?raw=true)
+	
+	弹窗效果
+![](https://github.com/Horrarndoo/parallaxListView/blob/master/assets/demo_popup.gif?raw=true)
+	
