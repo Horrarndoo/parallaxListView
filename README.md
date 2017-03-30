@@ -1,4 +1,4 @@
-#parallaxListView
+# parallaxListView
 	
 	实现仿QQ控件主页效果：
 	1.透明状态栏+TitleBar
