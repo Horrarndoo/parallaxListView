@@ -7,5 +7,6 @@
 	4.下拉加载更多
 	5.点击按钮弹出PopupWindow list选项效果
 	6.点击+顶部弹出PopupWindow界面效果
+博客链接：[Android自定义控件：打造自己的QQ空间主页](http://blog.csdn.net/oQinYou/article/details/68491295)
 
 ![](https://github.com/Horrarndoo/parallaxListView/blob/master/assets/demo.gif?raw=true)
