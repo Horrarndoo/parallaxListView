@@ -141,7 +141,7 @@ public class ParallaxListView extends ListView {
                 //test
                 onRefeshChangeListener.onListRefeshFinish(true);
                 isRefeshing = false;
-                //onRefeshChangeListener.onRefeshFinish(true);
+                //onRefeshChangeListener.onRefeshFinish(false);
             }
         }).start();
     }

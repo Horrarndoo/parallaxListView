@@ -13,16 +13,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.zyw.horrarndoo.parallaxlistview.R;
 import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 import com.zyw.horrarndoo.parallaxlistview.view.popupwindow.BlurPopupWindow;
 
-import java.util.ArrayList;
-
 import static com.zyw.horrarndoo.parallaxlistview.view.parallaxview.GradientLayout.OnGradientStateChangeListenr;
+
+
+import static com.zyw.horrarndoo.parallaxlistview.view.popupwindow.BlurPopupWindow
+        .KEYWORD_LOCATION_TOP;
 
 /**
  * Created by Horrarndoo on 2017/3/27.
@@ -58,42 +59,28 @@ public class TitleBar extends LinearLayout implements OnClickListener {
 
     public void setActivity(Activity activity) {
         this.context = activity;
-        //initPopupWindow((Activity) context);
+        initPopupWindow((Activity) context);
     }
 
     private void initPopupWindow(final Activity context) {
-        //下面的操作是初始化弹出数据
-        ArrayList<String> strList = new ArrayList<>();
-        strList.add("选项item1");
-        strList.add("选项item2");
-        strList.add("选项item3");
-
-        ArrayList<View.OnClickListener> clickList = new ArrayList<>();
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        ImageView iv_popup_top = new ImageView(context);
+        LayoutParams params = new LayoutParams(LayoutParams
+                .MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        iv_popup_top.setLayoutParams(params);
+        blurPopupWindow = new BlurPopupWindow(context, iv_popup_top,
+                KEYWORD_LOCATION_TOP);
+        blurPopupWindow.setOnPopupStateListener(new BlurPopupWindow.OnPopupStateListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "click click click.", Toast.LENGTH_SHORT).show();
+            public void onDisplay(boolean isDisplay) {
+                TitleBar.this.isDisplay = isDisplay;
             }
-        };
-        clickList.add(clickListener);
-        clickList.add(clickListener);
-        clickList.add(clickListener);
-        clickList.add(clickListener);
 
-        //具体初始化逻辑看下面的图
-        //blurPopupWindow = new BlurPopupWindow(context, strList, clickList);
-//        blurPopupWindow.setOnPopupStateListener(new BlurPopupWindow.OnPopupStateListener() {
-//            @Override
-//            public void onDisplay(boolean isDisplay) {
-//                TitleBar.this.isDisplay = isDisplay;
-//            }
-//
-//            @Override
-//            public void onDismiss(boolean isDisplay) {
-//                TitleBar.this.isDisplay = isDisplay;
-//                dismissAnim();
-//            }
-//        });
+            @Override
+            public void onDismiss(boolean isDisplay) {
+                TitleBar.this.isDisplay = isDisplay;
+                dismissAnim();
+            }
+        });
     }
 
     /**
@@ -182,12 +169,12 @@ public class TitleBar extends LinearLayout implements OnClickListener {
 
     public void displayPopupWindow(View v) {
         displayAnim();
-        blurPopupWindow.displayPopupWindow(v);
+        blurPopupWindow.displayPopupWindow(v, KEYWORD_LOCATION_TOP);
     }
 
     public void dismissPopupWindow() {
         dismissAnim();
-        blurPopupWindow.dismissPopupWindow();
+        blurPopupWindow.dismissPopupWindow(KEYWORD_LOCATION_TOP);
     }
 
     /**
@@ -207,6 +194,7 @@ public class TitleBar extends LinearLayout implements OnClickListener {
     public interface OnBarClicklistener {
         /**
          * TitleBar中控件点击监听
+         *
          * @param id
          */
         void onBarClick(int id);

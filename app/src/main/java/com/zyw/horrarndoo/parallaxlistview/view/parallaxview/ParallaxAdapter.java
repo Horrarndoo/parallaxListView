@@ -117,6 +117,9 @@ public class ParallaxAdapter extends BaseAdapter implements BlurPopupWindow.OnPo
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(UIUtils.getContext(), "item " + position + " is clicked.", Toast
                         .LENGTH_SHORT).show();
+                if(blurPopupWindow != null) {
+                    blurPopupWindow.dismissPopupWindow();
+                }
             }
         });
         blurPopupWindow = new BlurPopupWindow(context, lv_popup);
