@@ -84,7 +84,7 @@ public class TitleBar extends LinearLayout implements OnClickListener {
     }
 
     /**
-     * 设置Gradient临界值监听
+     * 设置TitleBar监听
      *
      * @param gl
      */

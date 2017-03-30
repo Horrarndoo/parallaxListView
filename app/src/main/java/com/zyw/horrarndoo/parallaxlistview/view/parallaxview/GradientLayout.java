@@ -19,7 +19,7 @@ import com.zyw.horrarndoo.parallaxlistview.utils.UIUtils;
 public class GradientLayout extends FrameLayout implements OnScrollListener, ParallaxListView.OnRefeshChangeListener {
     private TitleBar tb_title;
     private ParallaxListView plv;
-    private static final float CRITICA_LVALUE = 0.5f;
+    private static final float CRITICAL_VALUE = 0.5f;
     private OnGradientStateChangeListenr onGradientStateChangeListenr;
     private OnRefeshChangeListener onRefeshChangeListener;
     private Context context;
@@ -112,7 +112,7 @@ public class GradientLayout extends FrameLayout implements OnScrollListener, Par
         int color = (int) ColorUtil.evaluateColor(fraction, Color.parseColor("#0000ccff"), Color
                 .parseColor("#ff00ccff"));
         setTitleBackground(color);
-        onGradientStateChangeListenr.onChange(fraction, CRITICA_LVALUE);
+        onGradientStateChangeListenr.onChange(fraction, CRITICAL_VALUE);
     }
 
     /**
